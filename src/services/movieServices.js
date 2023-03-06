@@ -1,3 +1,5 @@
+const {Movies} = require('../../database/models')
+
 const movieList = [
     {
         id: 1,
@@ -37,41 +39,78 @@ const movieList = [
     },
 ]
 
-const getAllMoviesServices = () => {
-    return movieList;
+const getAllMoviesServices = async () => {
+    const data = await Movies.findAll()
+    console.log(data);
+    return data;
 }
 
-const getAllMoviesCompletedServices = () => {
-    const temp = movieList.filter(item => item.completed === true);
-    if(temp.length > 0){
-        return temp
-    }
-    else{
-        return "NONE OF THE MOVIE IS COMPLETED";
-    }
+const getAllMoviesCompletedServices = async () => {
+    const data = await Movies.findAll({
+        where: {
+            completed : true
+        }
+    })
+    return data;
+    // const temp = movieList.filter(item => item.completed === true);
+    // if(temp.length > 0){
+    //     return temp
+    // }
+    // else{
+    //     return "NONE OF THE MOVIE IS COMPLETED";
+    // }
 }
 
-const getAllMoviesInCompletedServices = () => {
-    const temp = movieList.filter(item => item.completed === false);
-    if(temp.length > 0){
-        return temp
-    }
-    else{
-        return "NO INCOMPLETED MOVIE"
-    }
+const getAllMoviesInCompletedServices = async () => {
+    const data = await Movies.findAll({
+        where: {
+            completed: false,
+        }
+    })
+    return data;
+    // const temp = movieList.filter(item => item.completed === false);
+    // if(temp.length > 0){
+    //     return temp
+    // }
+    // else{
+    //     return "NO INCOMPLETED MOVIE"
+    // }
 }
 
-const getMovieByIdServices = (id) => {
-    const temp =  movieList.find(item => item.id === Number(id));
-    if(temp){
-        return temp
-    }
-    else {
-        return "INVALID ID"
-    }
+const getMovieByIdServices = async (_id) => {
+    const data = await Movies.findOne({
+        where: {
+            id: _id
+        }
+    })
+    return data;
+    // const temp =  movieList.find(item => item.id === Number(id));
+    // if(temp){
+    //     return temp
+    // }
+    // else {
+    //     return "INVALID ID"
+    // }
 }
 
-const addNewMovieServices = (data) => {
+const addNewMovieServices = async (data) => {
+
+    // await Movies.create({
+    //     name: 'Hello',
+    //     completed: true,
+    //     duration: 12,
+    //     year: 2001,
+    // })
+
+    await Movies.create({
+        name: "Avengers",
+        year: 2012,
+        completed: false,
+        duration: 135
+    })
+
+    console.log('created 1 row')
+
     movieList.push({
         ...data,
         id: movieList.length+1,
